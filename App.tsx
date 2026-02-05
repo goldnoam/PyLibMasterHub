@@ -1,3 +1,4 @@
+
 import React, { useState, useMemo, useEffect } from 'react';
 import Layout, { FontSize } from './components/Layout';
 import LibraryCard from './components/LibraryCard';
@@ -9,26 +10,32 @@ const App: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<Category | 'All'>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLibrary, setSelectedLibrary] = useState<Library | null>(null);
-  const [isDark, setIsDark] = useState(true);
   
-  // Initialize font size from localStorage if available
+  // Initialize theme from localStorage
+  const [isDark, setIsDark] = useState<boolean>(() => {
+    const saved = localStorage.getItem('pylib_theme');
+    return saved !== null ? saved === 'true' : true;
+  });
+  
+  // Initialize font size from localStorage
   const [fontSize, setFontSize] = useState<FontSize>(() => {
     const saved = localStorage.getItem('pylib_font_size');
     return (saved === 'sm' || saved === 'base' || saved === 'lg') ? saved : 'base';
   });
 
-  // Sync dark mode class and handle dynamic metadata/favicon injection
+  // Sync dark mode class and theme choice
   useEffect(() => {
     if (isDark) {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
+    localStorage.setItem('pylib_theme', isDark.toString());
+  }, [isDark]);
 
-    // SEO and Meta Tags Injection
+  // Handle dynamic metadata/favicon injection
+  useEffect(() => {
     document.title = "PyLibMaster Hub | The Ultimate Python Library Guide";
-    
-    // Favicon Injection
     const link = document.querySelector("link[rel~='icon']") || document.createElement('link');
     // @ts-ignore
     link.rel = 'icon';
@@ -37,7 +44,7 @@ const App: React.FC = () => {
     if (!document.querySelector("link[rel~='icon']")) {
       document.head.appendChild(link);
     }
-  }, [isDark]);
+  }, []);
 
   // Persist font size choice
   useEffect(() => {
@@ -60,7 +67,6 @@ const App: React.FC = () => {
       fontSize={fontSize}
       setFontSize={setFontSize}
     >
-      {/* Hero Section */}
       <section className="relative overflow-hidden pt-12 pb-24 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto text-center relative z-10">
           <div className="inline-flex items-center space-x-2 bg-brand-500/10 dark:bg-brand-500/20 px-3 py-1 rounded-full text-brand-600 dark:text-brand-400 text-sm font-medium mb-6">
@@ -72,14 +78,14 @@ const App: React.FC = () => {
           </div>
           
           <h1 className="text-5xl sm:text-7xl font-extrabold text-slate-900 dark:text-white mb-6 tracking-tight leading-tight">
-            Master Every Python <br />
+            Learn Python Libraries<br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-500 to-indigo-500">
-              Package That Matters
+              Offline Mastery Hub
             </span>
           </h1>
           
           <p className="max-w-2xl mx-auto text-xl text-slate-600 dark:text-slate-400 mb-10 leading-relaxed">
-            Explore Data Science, Web Scraping, Machine Learning, and foundational libraries with interactive examples and deep technical insights.
+            Instant access to Data Science, ML, and automation libraries with static examples and high-quality documentation.
           </p>
 
           <div className="max-w-xl mx-auto relative group">
@@ -96,16 +102,13 @@ const App: React.FC = () => {
           </div>
         </div>
         
-        {/* Background Gradients */}
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full -z-0 pointer-events-none opacity-20 dark:opacity-40">
            <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-500/30 rounded-full blur-[120px]"></div>
            <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-500/20 rounded-full blur-[120px]"></div>
         </div>
       </section>
 
-      {/* Main Catalog */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Filter Bar */}
         <div className="flex flex-wrap items-center gap-3 mb-12 sticky top-20 z-40 bg-slate-50/80 dark:bg-slate-950/80 backdrop-blur-md py-4 rounded-xl px-2">
           <button
             onClick={() => setSelectedCategory('All')}
@@ -132,7 +135,6 @@ const App: React.FC = () => {
           ))}
         </div>
 
-        {/* Results Info */}
         <div className="mb-8 flex justify-between items-center">
           <h2 className="text-lg font-bold text-slate-900 dark:text-white">
             {selectedCategory === 'All' ? 'Full Catalog' : selectedCategory} 
@@ -140,7 +142,6 @@ const App: React.FC = () => {
           </h2>
         </div>
 
-        {/* Grid */}
         {filteredLibraries.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {filteredLibraries.map(lib => (
@@ -158,17 +159,8 @@ const App: React.FC = () => {
             <p className="text-slate-500">Try searching for something else or changing the category.</p>
           </div>
         )}
-
-        {/* Ad Placeholder */}
-        <div className="my-16 w-full flex flex-col items-center">
-          <p className="text-slate-400 text-[10px] font-mono tracking-widest uppercase mb-2">Resource Placeholder</p>
-          <div className="w-full h-32 bg-slate-100 dark:bg-slate-900 rounded-3xl flex items-center justify-center border border-dashed border-slate-300 dark:border-slate-800 overflow-hidden text-slate-400 text-sm italic">
-             Community-driven content coming soon
-          </div>
-        </div>
       </section>
 
-      {/* Community Callout */}
       <section className="mt-32 mb-16 px-4 sm:px-6 lg:px-8">
         <div className="max-w-5xl mx-auto rounded-[3rem] p-12 sm:p-20 bg-gradient-to-br from-brand-600 to-indigo-700 relative overflow-hidden text-center text-white shadow-2xl">
           <div className="relative z-10">
@@ -184,13 +176,11 @@ const App: React.FC = () => {
               <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
             </a>
           </div>
-          {/* Decorative shapes */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-64 h-64 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl"></div>
         </div>
       </section>
 
-      {/* Modals */}
       <LibraryModal 
         library={selectedLibrary} 
         onClose={() => setSelectedLibrary(null)} 

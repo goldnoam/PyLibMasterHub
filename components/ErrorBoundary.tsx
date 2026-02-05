@@ -10,24 +10,28 @@ interface State {
   error?: Error;
 }
 
-// Fixed Error: Property 'props' does not exist on type 'ErrorBoundary'.
-// Explicitly extending React.Component with the Props and State interfaces 
-// ensures that inherited properties such as 'this.props' are correctly typed and recognized by the compiler.
+/**
+ * ErrorBoundary catches JavaScript errors in child components.
+ * It follows the official React documentation for class-based error boundaries.
+ */
 class ErrorBoundary extends React.Component<Props, State> {
   public state: State = {
     hasError: false
   };
 
+  // The lifecycle method getDerivedStateFromError is used to update state after an error is thrown.
   public static getDerivedStateFromError(error: Error): State {
     return { hasError: true, error };
   }
 
   public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
-    console.error("Uncaught error:", error, errorInfo);
+    // Log the error for debugging purposes
+    console.error("Uncaught error caught by ErrorBoundary:", error, errorInfo);
   }
 
   public render(): ReactNode {
     if (this.state.hasError) {
+      // Fallback UI when an error occurs
       return (
         <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950 p-6">
           <div className="max-w-md w-full bg-white dark:bg-slate-900 rounded-3xl p-8 shadow-2xl border border-red-100 dark:border-red-900/30 text-center">
@@ -54,7 +58,7 @@ class ErrorBoundary extends React.Component<Props, State> {
       );
     }
 
-    // Correctly accessing children via this.props which is now recognized due to proper generic inheritance from React.Component.
+    // Accessing 'props' through 'this', which is provided by inheriting from React.Component<Props, State>.
     return this.props.children;
   }
 }

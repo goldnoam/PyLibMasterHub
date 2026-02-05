@@ -17,6 +17,9 @@ export interface Library {
   category: Category;
   icon: string;
   shortDescription: string;
+  longDescription?: string;
+  keyFeatures?: string[];
+  codeExample?: string;
   officialUrl?: string;
 }
 
