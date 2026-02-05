@@ -1,5 +1,5 @@
 
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import React, { ErrorInfo, ReactNode } from 'react';
 
 interface Props {
   children?: ReactNode;
@@ -14,11 +14,14 @@ interface State {
  * ErrorBoundary catches JavaScript errors in child components.
  * It follows the official React documentation for class-based error boundaries.
  */
-// Fix: Use 'Component' from 'react' explicitly to ensure the base class properties like 'props' and 'state' are correctly typed and recognized by the TypeScript compiler.
-class ErrorBoundary extends Component<Props, State> {
-  public state: State = {
-    hasError: false
-  };
+// Fix: Use 'React.Component' explicitly and include a constructor with 'super(props)' to ensure base class properties like 'props' and 'state' are correctly recognized by the TypeScript compiler.
+class ErrorBoundary extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      hasError: false
+    };
+  }
 
   // The lifecycle method getDerivedStateFromError is used to update state after an error is thrown.
   public static getDerivedStateFromError(error: Error): State {
@@ -31,7 +34,7 @@ class ErrorBoundary extends Component<Props, State> {
   }
 
   public render(): ReactNode {
-    // Fix: Destructure state and props from 'this' inside render to cleanly access hasError, error, and children.
+    // Destructure state and props from 'this' inside render to cleanly access hasError, error, and children.
     const { hasError, error } = this.state;
     const { children } = this.props;
 
@@ -63,7 +66,7 @@ class ErrorBoundary extends Component<Props, State> {
       );
     }
 
-    // Accessing 'children' through the destructured props variable.
+    // Returning children from the destructured props.
     return children;
   }
 }

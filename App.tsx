@@ -161,26 +161,6 @@ const App: React.FC = () => {
         )}
       </section>
 
-      <section className="mt-32 mb-16 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-5xl mx-auto rounded-[3rem] p-12 sm:p-20 bg-gradient-to-br from-brand-600 to-indigo-700 relative overflow-hidden text-center text-white shadow-2xl">
-          <div className="relative z-10">
-            <h2 className="text-4xl sm:text-5xl font-bold mb-6">Contribute to the Index</h2>
-            <p className="text-xl text-brand-100 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Missing a library? Our index is growing and we value community input.
-            </p>
-            <a 
-              href="mailto:goldnoamai@gmail.com"
-              className="inline-flex items-center px-8 py-4 bg-white text-brand-700 font-bold rounded-2xl hover:bg-brand-50 transition-all shadow-lg hover:-translate-y-1"
-            >
-              Contact Support
-              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-            </a>
-          </div>
-          <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 w-64 h-64 bg-black/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl"></div>
-        </div>
-      </section>
-
       <LibraryModal 
         library={selectedLibrary} 
         onClose={() => setSelectedLibrary(null)} 
