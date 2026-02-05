@@ -25,6 +25,15 @@ const Layout: React.FC<LayoutProps> = ({ children, toggleTheme, isDark, fontSize
     lg: 'text-lg',
   };
 
+  const getAriaLabel = (size: FontSize) => {
+    switch(size) {
+      case 'sm': return 'Switch to small text';
+      case 'base': return 'Switch to medium text';
+      case 'lg': return 'Switch to large text';
+      default: return '';
+    }
+  };
+
   return (
     <div className={`min-h-screen flex flex-col font-sans selection:bg-brand-500 selection:text-white transition-all duration-200 ${fontSizeClasses[fontSize]}`}>
       {/* Header */}
@@ -45,11 +54,13 @@ const Layout: React.FC<LayoutProps> = ({ children, toggleTheme, isDark, fontSize
           
           <div className="flex items-center space-x-2 sm:space-x-4">
             {/* Font Size Controls */}
-            <div className="flex bg-slate-100 dark:bg-slate-800 rounded-lg p-1">
+            <div className="flex bg-slate-100 dark:bg-slate-800 rounded-lg p-1" role="group" aria-label="Adjust font size">
               {(['sm', 'base', 'lg'] as FontSize[]).map((size) => (
                 <button
                   key={size}
                   onClick={() => setFontSize(size)}
+                  aria-label={getAriaLabel(size)}
+                  aria-pressed={fontSize === size}
                   className={`px-3 py-1 rounded-md text-xs font-bold uppercase transition-all ${
                     fontSize === size 
                       ? 'bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 shadow-sm' 
@@ -65,6 +76,7 @@ const Layout: React.FC<LayoutProps> = ({ children, toggleTheme, isDark, fontSize
               onClick={toggleTheme}
               className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors"
               title="Toggle Theme"
+              aria-label="Toggle dark and light mode"
             >
               {isDark ? (
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-yellow-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">

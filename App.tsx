@@ -10,7 +10,12 @@ const App: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLibrary, setSelectedLibrary] = useState<Library | null>(null);
   const [isDark, setIsDark] = useState(true);
-  const [fontSize, setFontSize] = useState<FontSize>('base');
+  
+  // Initialize font size from localStorage if available
+  const [fontSize, setFontSize] = useState<FontSize>(() => {
+    const saved = localStorage.getItem('pylib_font_size');
+    return (saved === 'sm' || saved === 'base' || saved === 'lg') ? saved : 'base';
+  });
 
   // Sync dark mode class and handle dynamic metadata/favicon injection
   useEffect(() => {
@@ -33,6 +38,11 @@ const App: React.FC = () => {
       document.head.appendChild(link);
     }
   }, [isDark]);
+
+  // Persist font size choice
+  useEffect(() => {
+    localStorage.setItem('pylib_font_size', fontSize);
+  }, [fontSize]);
 
   const filteredLibraries = useMemo(() => {
     return LIBRARIES.filter(lib => {
